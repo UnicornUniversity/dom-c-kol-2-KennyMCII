@@ -11,11 +11,64 @@
  * @returns {string} containing number converted to output system
  */
 export function main(inputNumber, inputNumberSystem, outputNumberSystem) {
-  //TODO code
-  //let dtoOut = exMain(inputNumber, inputNumberSystem, outputNumberSystem);
-  return dtoOut;
-}
+  inputNumber = inputNumber.toString();
+  if (inputNumberSystem === outputNumberSystem) {
+    return inputNumber;
+  }
 
+  let decimalni = 0;
+
+  // binarni do decimalniho
+  if (inputNumberSystem === 2) {
+    for (let i = 0; i < inputNumber.length; i++) {
+      let znak = inputNumber[i];
+
+      if (znak !== "0" && znak !== "1") {
+        throw new Error("Neplatné binární číslo");
+      }
+
+      let exponent = inputNumber.length - 1 - i;
+      let pocitaneCislo = (znak === "1" ? 1 : 0) * (2 ** exponent);
+
+      decimalni += pocitaneCislo;
+    }
+  }
+
+  // decimalni do decimalniho
+  else if (inputNumberSystem === 10) {
+    for (let i = 0; i < inputNumber.length; i++) {
+      let znak = inputNumber[i];
+      let cislo = znak.charCodeAt(0) - 48;
+      decimalni = decimalni * 10 + cislo;
+    }
+  }
+
+  else {
+    throw new Error("Nepodporovaný vstupní systém");
+  }
+
+  // output
+  if (outputNumberSystem === 10) {
+    return decimalni.toString();
+  }
+
+  if (outputNumberSystem === 2) {
+    if (decimalni === 0) return "0";
+
+    let vysledek = "";
+
+    while (decimalni > 0) {
+      let zbytek = decimalni % 2;
+      vysledek = zbytek + vysledek;
+      decimalni = Math.floor(decimalni / 2);
+    }
+
+    return vysledek;
+  }
+
+  throw new Error("Nepodporovaný výstupní systém");
+}
+	
 /**
  * TODO - Change this to contain all input number systems that your application can convert from.
  * Function which returns which number systems are permitted on input.
